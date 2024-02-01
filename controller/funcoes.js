@@ -30,14 +30,43 @@ const getFilmes = function(){
 }
 
 const getFilmesId = function(id){
- 
+    let status = false
+    let filmeFiltrado = {}
+    let arrayLocal = []
+    let infoFilme = {}
     let idRecebido = id
+    
+    filmesJson.filmes.forEach(function(idFilme){
+        
+        
+        
+        if(idFilme.id == idRecebido  ){
+            infoFilme = {
+            IdFilme:idFilme.nome,
+            Lancamento :idFilme.data_lancamento,
+            Relancamento:idFilme.data_relancamento,
+            duracao :idFilme.duracao,
+            sinopse : idFilme.sinopse,
+            valor_unitario : idFilme.valor_unitario
+         }
 
+        arrayLocal.push(infoFilme)
+            status = true
+        }
 
+        
+    })
+    filmeFiltrado.filmes = arrayLocal
 
+    if(status){
+        return filmeFiltrado
+        
+    }else{
+        return false
+    }
 }
 
-console.log(getFilmes())
+console.log(getFilmesId(2))
 module.exports = {
     getFilmes,
     getFilmesId

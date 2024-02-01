@@ -38,6 +38,10 @@ app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next)
         response.status(404)
     }
 })
+
+
+//   /versão/nomeDoProjeto/filme/1
+app.get('/v1/acmeFilmes/filmes')
 app.listen('8080', function(){
     console.log('Api Funcionando!!')
 })
