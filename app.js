@@ -3,6 +3,22 @@ const bodyParser = require('body-parser')
 const cors = require('cors');
 const { filmes } = require('./module/filmes.js');
 
+/**
+ *  Para realizar a integração com o banco de dados devemos utilizar uma das seguintes bibliotecas:
+ *        -SEQUELIZE    (BIBLIOTECA ANTIGA, E POSSUI MAIS CONTEUDOS EXPLICATIVOS NA WEB)
+ *        -PRISMA ORM   (A BIBLIOTECA MAIS ATUAL - UTILIZADA NESSE PROJETO)
+ *        -FASTFY ORM   (A BIBLIOTECA MAIS ATUAL)
+ * 
+ * 
+ *      Para a instalação do Prisma ORM
+ *      npm instal --save   (É responsávem pela conexão como o DB)
+ *      npm install @prisma/client --save   (É responsavel por executar scripts SQL mo DB)
+ *  
+ *      Para inocializar o prisma no projeto
+ * 
+ *      npx prisma init
+ */
+
 // Criando um objeto para manipular as requisoções da API
 const app = express();
 
@@ -22,13 +38,18 @@ app.use((request, response, next) =>{
     next();
 })
 
+/***************************************** Import dos arquivos do controller do projeto***********************/
+    const controllerFilmes = require('./controller/controller_filme.js')
+
 
 //EndPoints:
-
+    //Versão 1.0 que retorna os dados de um arquivo de filmes
+    //Periodo de utilização 01/2024 até 02/2024
 app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next){
     //http://localhost:8080/v1/acmeFilmes/filmes
     
     let controleFilmes = require('./controller/funcoes.js');
+    
     let listaFilmes = controleFilmes.getFilmes();
 
     if(listaFilmes){
@@ -39,9 +60,25 @@ app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next)
     }
 })
 
+    //Versão 2.0 que retorna os dados de filmes do Banco de Dados
+app.get('/v2/acmeFilmes/filmes',cors(),async function(request, response, next){
 
-//   /versão/nomeDoProjeto/filme/1
-app.get('/v1/acmeFilmes/filmes')
+    //Chama a função da controller para retornar todos os filmes
+    let dadosFilmes = await controllerFilmes.getListarFilmes()
+
+    //Validação para verificar se existe dados a serem retornados
+    if (dadosFilmes) {
+        response.json(dadosFilmes)
+        response.status(200)
+    }else{
+        response.json({message: 'Nenhum registro encontrado'})
+        response.status(404)
+    }
+})
+
+
 app.listen('8080', function(){
     console.log('Api Funcionando!!')
 })
+
+
