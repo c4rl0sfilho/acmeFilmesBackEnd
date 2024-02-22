@@ -76,6 +76,37 @@ app.get('/v2/acmeFilmes/filmes',cors(),async function(request, response, next){
     }
 })
 
+app.get('/v2/acmeFilmes/filmes/filtro',cors(), async function(request, response){
+    //  /v2/acmeFilmes/filmes/filtro?nome=valor
+
+    // const variavel = req.query.nomeDaVariavel;
+    let nome = request.query.nome
+
+   
+
+    let dadosFilmes = await controllerFilmes.getFilmeFiltrado(nome)
+
+    response.status(dadosFilmes.status_code)
+    response.json(dadosFilmes)
+
+
+   
+})
+
+//Retorna os dados de um filme pelo ID
+app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
+    const idFilme = request.params.id
+
+    //Encaminha para a controller verificar se ha dados
+    let dadosFilme = await controllerFilmes.getBuscarFilme(idFilme)
+
+    
+
+    response.status(dadosFilme.status_code)
+    response.json(dadosFilme)
+
+})
+
 
 app.listen('8080', function(){
     console.log('Api Funcionando!!')
