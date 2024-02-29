@@ -1,0 +1,2 @@
+--> npm i - Re-instala e atualiza as dependencias da pasta "packge.json"
+--> npx prisma generate - Sincroniza o back com o banco de dados novamente = refaz a conexão entre back e banco

@@ -16,7 +16,43 @@ const {PrismaClient} = require('@prisma/client');
 
 
 //Função para inserir novo filme no banco de dados
-const insertFilme = async function(){
+const insertFilme = async function(dadosFilme){
+    try {
+        let sql = `insert into tbl_filme
+     (
+        nome ,
+        sinopse, 
+        duracao, 
+        data_lacamento, 
+        data_relancamento, 
+        fato_capa, 
+        valor_unitario
+        ) values(
+            '${dadosFilme.nome}',
+            '${dadosFilme.sinopse}',
+            '${dadosFilme.duracao}',
+            '${dadosFilme.data_lacamento}',
+            '${dadosFilme.data_relancamento}',
+            '${dadosFilme.fato_capa}',
+            '${dadosFilme.valor_unitario}'
+        )`;
+
+        //$executeRawUnsafe() serve para executar scripts sem retorno de dados
+            //(update, insert e delete)
+        //$querryRawUnsafe() - serve para executar scripts com retorno de dados
+            //(select)
+        let result = await prisma.$executeRawUnsafe(sql);
+
+        if (result) {
+            return true
+        }else{
+            return false
+        }
+    } catch (error) {
+        return false
+    }
+    
+
 
 }
 

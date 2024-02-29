@@ -30,7 +30,7 @@ app.use((request, response, next) =>{
     //Permite especificar quem poderá acessar a API('*' - libera o acesso publico, 'IP' - libera acesso apenas para aquela máquina)
     response.header('Access-Control-Allow-Origin', '*')
     //Permite especificar como a API, será requisitada (GET, POST, PUT e DELETE)
-    response.header('Access-Control-Allow-Methods','GET')
+    response.header('Access-Control-Allow-Methods','GET, POST, PUT, DELETE, OPTIONS')
 
 //Ativa as configurações de permissão do cors
     app.use(cors());
@@ -40,6 +40,12 @@ app.use((request, response, next) =>{
 
 /***************************************** Import dos arquivos do controller do projeto***********************/
     const controllerFilmes = require('./controller/controller_filme.js')
+
+
+/*********************************************************************************************************** */
+
+//Criando um objeto para controlar os dados que chegam da requisição em formato JSON
+const bodyParserJSON = bodyParser.json()
 
 
 //EndPoints:
@@ -104,6 +110,19 @@ app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
 
     response.status(dadosFilme.status_code)
     response.json(dadosFilme)
+
+})
+
+app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request, response){
+
+    //Recebe todos os dados encaminhados na requisição pelo body
+    let dadosBody = request.body;
+
+    //Encaminha os dados para o controller enviar para o DAO
+    let resultDadosNovoFilme = await controllerFilmes.setInserirNovoFilme(dadosBody)
+
+    response.status(resultDadosNovoFilme.status_code);
+    response.json(resultDadosNovoFilme)
 
 })
 
