@@ -15,7 +15,11 @@ const ERROR_NOT_FOUND = {status: false, status_code: 404, message: 'Não foi enc
 
 const ERROR_INTERNAL_SERVER_DB = {status: false, status_code: 500, message: 'Não foi possivel processar a requisição, devido a um acesso ao Banco de dades.Contate o administrafor da API'}
 
+const ERROR_INTERNAL_SERVER = {status: false, status_code: 500, message: 'Não foi possivel processar a requisição, devido a um problema na camada de negócio/controle da aplicação'}
+
 const ERROR_REQUIRED_FIELDS = {status: false, status_code: 400, message:'Existem campos requeridos que não foram preenchidos, ou não atendem aos critérios de digitação'}
+
+const ERROR_CONTENT_TYPE = {status: false, status_code: 415, message:'O content-type enbcaminhado na requisição não pe suportado pelo servidor. Deve-se encaminhar apenas requisicões com appliation/json'}
 
 
 
@@ -33,5 +37,7 @@ module.exports={
     ERROR_INTERNAL_SERVER_DB,
     ERROR_INVALID_CONTENT,
     ERROR_REQUIRED_FIELDS,
-    SUCESS_CREATED_ITEM
+    SUCESS_CREATED_ITEM,
+    ERROR_INTERNAL_SERVER,
+    ERROR_CONTENT_TYPE
 }

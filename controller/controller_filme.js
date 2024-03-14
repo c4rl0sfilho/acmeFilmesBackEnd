@@ -12,59 +12,72 @@ const filmesDAO = require('../model/DAO/filme.js')
 const message = require('../module/config.js')
 
 //Fução para inserir novo filme
-const setInserirNovoFilme = async function(dadosFilme){
+const setInserirNovoFilme = async function(dadosFilme, contentType){
+
+    try{
 
     
-    //cria um objeto JSON para devolver os dados criados na requisição
-    let novoFilmeJSON  = {}
 
-    //Validação de campos obrigatorios ou com digitação invalida
-    if(dadosFilme.nome == ''                     || dadosFilme.nome == undefined             || dadosFilme.nome == null || dadosFilme.nome.length > 80 || 
-       dadosFilme.sinopse == ''                  || dadosFilme.sinopse == undefined          || dadosFilme.sinopse == null || dadosFilme.sinopse.length > 65000 ||
-       dadosFilme.duracao == ''                  || dadosFilme.duracao == undefined          || dadosFilme.duracao == null || dadosFilme.duracao.length > 8 ||
-       dadosFilme.data_lancamento == ''          || dadosFilme.data_lancamento == undefined  || dadosFilme.nome == null || dadosFilme.data_lancamento.length != 10||
-       dadosFilme.foto_capa == ''                || dadosFilme == undefined                  || dadosFilme.nome == null || dadosFilme.foto_capa.length > 200 || 
-       dadosFilme.valor_unitario.length > 6
-       ){
-            return message.ERROR_REQUIRED_FIELDS; //400
-    }else
-        {
-            let validateStatuus = false
+        //Validação de content-type(apenas application/json)
+        if (String(contentType).toLowerCase() == 'application/json') {
+            
+    
+            
+            //cria um objeto JSON para devolver os dados criados na requisição
+            let novoFilmeJSON  = {}
 
-            if (dadosFilme.data_relancamento != null && dadosFilme.data_relancamento !=' '&& dadosFilme.data_relancamento != undefined){
+            //Validação de campos obrigatorios ou com digitação invalida
+            if(dadosFilme.nome == ''                     || dadosFilme.nome == undefined             || dadosFilme.nome == null || dadosFilme.nome.length > 80 || 
+            dadosFilme.sinopse == ''                  || dadosFilme.sinopse == undefined          || dadosFilme.sinopse == null || dadosFilme.sinopse.length > 65000 ||
+            dadosFilme.duracao == ''                  || dadosFilme.duracao == undefined          || dadosFilme.duracao == null || dadosFilme.duracao.length > 8 ||
+            dadosFilme.data_lancamento == ''          || dadosFilme.data_lancamento == undefined  || dadosFilme.nome == null || dadosFilme.data_lancamento.length != 10||
+            dadosFilme.foto_capa == ''                || dadosFilme == undefined                  || dadosFilme.nome == null || dadosFilme.foto_capa.length > 200 || 
+            dadosFilme.valor_unitario.length > 6
+            ){
+                    return message.ERROR_REQUIRED_FIELDS; //400
+            }else
+                {
+                    let validateStatuus = false
 
-                if(dadosFilme.data_relancamento.length != 10)   
-                    return message.ERROR_REQUIRED_FIELDS //400
-                else 
-                    validateStatuus = true
-            }else 
-                validateStatuus = true
+                    if (dadosFilme.data_relancamento != null && dadosFilme.data_relancamento !=' '&& dadosFilme.data_relancamento != undefined){
 
-        //Validação para verificar se a variavel booleana é verdadeira
-        if(validateStatuus){
-            
-            
-            //Encaminha os dados do novo filme para o DAO inserir no DB
-            let novoFilme = await filmesDAO.insertFilme(dadosFilme)
-            
-            //Validação para verificar se o DAO inseriu os dados no DB
-            if (novoFilme) {
-                //Cria o JSON de retorno de dados
-                novoFilmeJSON.filme = dadosFilme
-                novoFilmeJSON.status = message.SUCESS_CREATED_ITEM.status
-                novoFilmeJSON.status_code = message.SUCESS_CREATED_ITEM.status_code
-                novoFilmeJSON.message = message.SUCESS_CREATED_ITEM.message
-                
-                return novoFilmeJSON; //201
-            }else{
-                return message.ERROR_INTERNAL_SERVER_DB //500
-            
+                        if(dadosFilme.data_relancamento.length != 10)   
+                            return message.ERROR_REQUIRED_FIELDS //400
+                        else 
+                            validateStatuus = true
+                    }else 
+                        validateStatuus = true
+
+                //Validação para verificar se a variavel booleana é verdadeira
+                if(validateStatuus){
+                    
+                    
+                    //Encaminha os dados do novo filme para o DAO inserir no DB
+                    let novoFilme = await filmesDAO.insertFilme(dadosFilme)
+                    
+                    //Validação para verificar se o DAO inseriu os dados no DB
+                    if (novoFilme) {
+                        //Cria o JSON de retorno de dados
+                        novoFilmeJSON.filme = dadosFilme
+                        novoFilmeJSON.status = message.SUCESS_CREATED_ITEM.status
+                        novoFilmeJSON.status_code = message.SUCESS_CREATED_ITEM.status_code
+                        novoFilmeJSON.message = message.SUCESS_CREATED_ITEM.message
+                        
+                        return novoFilmeJSON; //201
+                    }else{
+                        return message.ERROR_INTERNAL_SERVER_DB //500
+                    
+                    }
+                }
             }
+            
+        }    else{
+            return message.ERROR_CONTENT_TYPE //415
         }
+    }catch(error){
+        return message.ERROR_INTERNAL_SERVER //500 - erro na controller
     }
-        
-        
-    }
+}
 
 //Função para atualizar um filme
 const setAtualizarNovoFilme = async function(){

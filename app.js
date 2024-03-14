@@ -69,6 +69,8 @@ app.get('/v1/acmeFilmes/filmes', cors(), async function(request, response, next)
     //Versão 2.0 que retorna os dados de filmes do Banco de Dados
 app.get('/v2/acmeFilmes/filmes',cors(),async function(request, response, next){
 
+   
+
     //Chama a função da controller para retornar todos os filmes
     let dadosFilmes = await controllerFilmes.getListarFilmes()
 
@@ -115,11 +117,14 @@ app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
 
 app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request, response){
 
+     //Recebe o content-type da requisição pelo body
+     let contentType = request.headers['content-type']
+
     //Recebe todos os dados encaminhados na requisição pelo body
     let dadosBody = request.body;
 
     //Encaminha os dados para o controller enviar para o DAO
-    let resultDadosNovoFilme = await controllerFilmes.setInserirNovoFilme(dadosBody)
+    let resultDadosNovoFilme = await controllerFilmes.setInserirNovoFilme(dadosBody, contentType)
 
     response.status(resultDadosNovoFilme.status_code);
     response.json(resultDadosNovoFilme)
