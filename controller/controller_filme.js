@@ -80,12 +80,98 @@ const setInserirNovoFilme = async function(dadosFilme, contentType){
 }
 
 //Função para atualizar um filme
-const setAtualizarNovoFilme = async function(){
+const setAtualizarFilme = async function(id, dadosFilme, contentType) {
+
+    try{
+
+        let idFilme = id;
+
+        if(idFilme == '' || idFilme == undefined || isNaN (idFilme)){
+            return message.ERROR_INVALID_ID
+            
+        }else{
+
+        if(String(contentType).toLowerCase() == 'application/json'){
+            let updateFilmeJson = {}
+            
+            if( dadosFilme.nome == ''                     || dadosFilme.nome == undefined               ||  dadosFilme.nome == null               || dadosFilme.nome.length > 80             || 
+                dadosFilme.sinopse == ''                  || dadosFilme.sinopse == undefined            ||  dadosFilme.sinopse == null            || dadosFilme.sinopse.length > 65000       ||
+                dadosFilme.duracao == ''                  || dadosFilme.duracao == undefined            ||  dadosFilme.duracao ==  null           || dadosFilme.duracao.length > 8           ||
+                dadosFilme.data_lancamento == ''          || dadosFilme.data_lancamento == undefined    ||  dadosFilme.data_lancamento == null    || dadosFilme.data_lancamento.length != 10 ||
+                dadosFilme.foto_capa == ''                || dadosFilme.foto_capa == undefined          ||  dadosFilme.foto_capa ==  null         || dadosFilme.foto_capa.length > 200       ||
+                dadosFilme.valor_unitario.length > 6      
+        ){
+            return message.ERROR_REQUIRED_FIELDS
+        } else {
+            let validateStatus = false
+
+            if (dadosFilme.data_relancamento != null    &&
+                dadosFilme.data_relancamento != ''      &&
+                dadosFilme.data_relancamento != undefined) {
+
+                if (dadosFilme.data_relancamento.length != 10) {
+                    return message.ERROR_REQUIRED_FIELDS
+                }else{
+                    validateStatus = true
+                }
+            } else {
+                validateStatus = true 
+            }
+
+            if (validateStatus){
+                let uptadeFilme = await filmesDAO.updateFilme (id, dadosFilme)
+                
+
+                if(uptadeFilme) {
+   
+                    updateFilmeJson.filme = dadosFilme                
+                    updateFilmeJson.status = message.SUCCESS_UPDATE_ITEM.status
+                    updateFilmeJson.status_code = message.SUCCESS_UPDATE_ITEM.status_code
+                    console.log(uptadeFilme)
+                    updateFilmeJson.message = message.SUCCESS_UPDATE_ITEM.message
+
+                    return updateFilmeJson
+                } else {
+                     return message.ERROR_INTERNAL_SERVER_DB 
+                }
+            }
+        }
+        } else {
+            return message.ERROR_CONTENT_TYPE
+        }
+        }
+
+    } catch (error) {
+        return message.ERROR_INTERNAL_SERVER
+    }
 
 }
-
 //Função para excluir um filme
-const setExcluirNovoFilme = async function(){
+const setExcluirNovoFilme = async function(id){
+        //Recebe o ID filme 
+        let idFilme = id
+
+
+        //Validação para verificar se o ID é valido (vazio, indefinodo e não numerico)
+        if(idFilme == "" || idFilme == undefined || isNaN(idFilme)){
+            return message.ERROR_INVALID_ID //400    
+        }else{
+
+            //Encaminha para o DAO localizar dados do filme
+            let result = await filmesDAO.deleteFilme(idFilme)
+
+            //Validação para verificar se existe dados de retorno
+            
+                if(result){
+                    return true                    
+                }else{
+                    return message.ERROR_NOT_FOUND //404
+                }
+
+               
+            
+        }
+
 
 }
 
@@ -178,7 +264,7 @@ const getBuscarFilme = async function(id){
 }
 
 module.exports = {
-    setAtualizarNovoFilme,
+    setAtualizarFilme,
     setExcluirNovoFilme,
     setInserirNovoFilme,
     getBuscarFilme,

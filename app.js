@@ -115,6 +115,30 @@ app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
 
 })
 
+app.delete('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
+    const idFilme = request.params.id
+
+    //Encaminha para a controller verificar se ha dados
+    let result = await controllerFilmes.setExcluirNovoFilme(idFilme)
+
+    
+    response.json({message: 'Item excluido com sucesso!'})
+    response.status(200)
+
+})
+
+app.put('/v2/acmefilmes/updateFilme/:id', cors(), bodyParserJSON, async function (request, response, next) {
+    
+    let contentType = request.headers['content-type']
+    let idFilme = request.params.id
+    let dadosBody = request.body
+
+    let resultUpdateFilme = await controllerFilmes.setAtualizarFilme(idFilme, dadosBody, contentType)
+
+    response.status(resultUpdateFilme.status_code)
+    response.json(resultUpdateFilme)
+})
+
 app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request, response){
 
      //Recebe o content-type da requisição pelo body

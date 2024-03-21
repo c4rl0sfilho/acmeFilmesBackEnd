@@ -29,6 +29,8 @@ const ERROR_CONTENT_TYPE = {status: false, status_code: 415, message:'O content-
 
 const SUCESS_CREATED_ITEM = {status: true, status_code: 201, message: 'Item criado com sucesso'}
 
+const SUCCESS_UPDATE_ITEM = {status: true, status_code: 200, message: 'Item atualizado com sucesso!!!'}
+
 
 
 module.exports={
@@ -37,7 +39,8 @@ module.exports={
     ERROR_INTERNAL_SERVER_DB,
     ERROR_INVALID_CONTENT,
     ERROR_REQUIRED_FIELDS,
-    SUCESS_CREATED_ITEM,
     ERROR_INTERNAL_SERVER,
-    ERROR_CONTENT_TYPE
+    ERROR_CONTENT_TYPE,
+    SUCESS_CREATED_ITEM,
+    SUCCESS_UPDATE_ITEM
 }
