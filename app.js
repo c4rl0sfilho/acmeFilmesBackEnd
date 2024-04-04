@@ -83,7 +83,7 @@ app.get('/v2/acmeFilmes/filmes',cors(),async function(request, response, next){
 })
 
 app.get('/v2/acmeFilmes/filmes/filtro',cors(), async function(request, response){
-    //  /v2/acmeFilmes/filmes/filtro?nome=valor
+    //  http://localhost:8080/v2/acmeFilmes/filmes/filtro?nome=valor
 
     // const variavel = req.query.nomeDaVariavel;
     let nome = request.query.nome
@@ -101,6 +101,7 @@ app.get('/v2/acmeFilmes/filmes/filtro',cors(), async function(request, response)
 
 //Retorna os dados de um filme pelo ID
 app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
+    //http://localhost:8080/v2/acmeFilmes/filme/:id
     const idFilme = request.params.id
 
     //Encaminha para a controller verificar se ha dados
@@ -114,7 +115,7 @@ app.get('/v2/acmeFilmes/filme/:id', cors(), async function(request, response){
 })
 
 app.post('/v2/acmeFilmes/filme', cors(), bodyParserJSON, async function(request, response){
-
+    //http://localhost:8080/v2/acmeFilmes/filme
     //Recebe todos os dados encaminhados na requisição pelo body
     let dadosBody = request.body;
 
