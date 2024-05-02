@@ -105,14 +105,46 @@ const getLastID = async function(){
 
 
 //Função para Atualizar um filme no banco de dados
-const updateFilme = async function(){
+const updateFilme = async function(id){
+
+    try {
+        
+        let sql
+           
+        sql = `update into tbl_filmes set
+        nome ="${dadosfilme.nome}",
+        sinopse ="${dadosfilme.sinopse}",
+        data_lancamento ="${dadosfilme.data_lancamento}",
+        data_relancanto ="${dadosfilme.data_rancamento}",
+        duracao ="${dadosfilme.duracao}",
+        foto_capa ="${dadosfilme.foto_capa}",
+        valor_unitario ="${dadosfilme.valor_unitario}" 
+        where id=${id}`
+
+        let rsInserirfilmes = await prisma.$executeRawUnsafe(sql)
+
+        if(rsInserirfilmes)
+            return true
+        else
+            return false
+
+    } catch (error) {
+        return false
+    }
 
 }
 
 //Função para excluir um filme no banco de dados
-const deleteFilme = async function(){
+const deleteFilme = async function(id){
 
-    
+    try {
+        var sql = `delete * from tbl_filmes where id=${id}`
+        let rsBuscarFilmes = await prisma.$queryRawUnsafe(sql)
+        return rsBuscarFilmes
+
+    } catch (error) {
+        return false
+    }
 
 }
 
