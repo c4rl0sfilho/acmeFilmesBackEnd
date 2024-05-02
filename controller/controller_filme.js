@@ -6,7 +6,7 @@
  ********************************************************************************************/
 
 //Import do arquivo de configuração do projeto
-const message = require('../modulo/config.js')
+const message = require('../module/config.js')
 
 //Import do arquivo responsavel pela interação com o BD
 const filmesDAO = require('../model/DAO/filme.js')
@@ -202,7 +202,7 @@ const getListarFilmes = async function () {
             for (let index = 0; index < dadosFilmes.length; index++) {
                 const element = dadosFilmes[index];
         
-                let atores = await filmesDAO.selectAtoresFilme(element.id)
+                let atores = await filmesDAO.selectAtorFilme(element.id)
 
                 if (atores) {
                     filmesJSON.atores = atores
@@ -214,8 +214,11 @@ const getListarFilmes = async function () {
             for (let index = 0; index < dadosFilmes.length; index++) {
                 const element = dadosFilmes[index]
 
-                let classificacao = await classificacaoDAO.selectByIdClassificacao(element.id_classificacao)
-                filmesJSON.classificacao = classificacao[0].classificacao
+                console.log(element);
+
+                let classificacao = await classificacaoDAO.selectByIdClassificacao(element.tbl_classificacao_id)
+                filmesJSON.classificacao = classificacao[index]
+               
             }
             return filmesJSON
         } else {
@@ -239,8 +242,8 @@ const getBuscarFilme = async function (id) {
     } else {
         //Encaminha o ID para a DAO buscar no banco de dados
         let dadosFilme = await filmesDAO.selectByIdFilme(idFilme)
-        let classificacao = await classificacaoDAO.selectByIdClassificacao(dadosFilme[0].id_classificacao)
-        let atores = await filmesDAO.selectAtoresFilme(dadosFilme[0].id)
+        let classificacao = await classificacaoDAO.selectByIdClassificacao(dadosFilme.id_classificacao)
+        let atores = await filmesDAO.selectAtorFilme(dadosFilme.id)
 
         //Verifica se o DAO retornou dados
         if (dadosFilme) {

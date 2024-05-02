@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
 
 
-const selectALlAtores = async function () {
+const selectAllAtores = async function () {
     try {
         let sql = 'select * from tbl_ator'
 
@@ -223,7 +223,7 @@ const selectFilmesAtor = async function (idAtor) {
 }
 
 module.exports = {
-    selectALlAtores,
+    selectAllAtores,
     selectSexo,
     selectBuscarAtor,
     insertAtor,

@@ -48,9 +48,11 @@ const selectByIdClassificacao = async function(id){
         //script sql
         let sql = `select * from tbl_classificacao where id = ${id}`
 
+        console.log(sql)
         //executa o script no banco de dados
         let rsClassificacao = await prisma.$queryRawUnsafe(sql)
 
+        
         if(rsClassificacao){
             return rsClassificacao
         }else{
