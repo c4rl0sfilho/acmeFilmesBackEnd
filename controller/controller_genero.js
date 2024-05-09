@@ -1,7 +1,7 @@
 //DAO de gênero
 const generoDAO = require('../model/DAO/genero')
 //arquivo que guarda as mensagens globais
-const message = require('../modulo/config')
+const message = require('../module/config')
 
 
 
@@ -60,8 +60,7 @@ const setCadastrarGenero = async function (dadosGenero, contentType) {
             let novoGeneroJson = {}
 
             if (
-                dadosGenero.nome == '' || dadosGenero.nome == null || dadosGenero.nome == undefined || dadosGenero.nome.length > 70 ||
-                dadosGenero.descricao_genero == '' || dadosGenero.descricao_genero == null || dadosGenero.descricao_genero == undefined
+                dadosGenero.nome == '' || dadosGenero.nome == null || dadosGenero.nome == undefined || dadosGenero.nome.length > 70 
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {

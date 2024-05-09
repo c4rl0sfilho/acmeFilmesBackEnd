@@ -40,6 +40,10 @@ app.use((request, response, next) =>{
 
 /***************************************** Import dos arquivos do controller do projeto***********************/
     const controllerFilmes = require('./controller/controller_filme.js')
+    const controllerClassificacao = require('./controller/controller_classificacao.js')
+    const controllerGenero = require('./controller/controller_genero.js')
+    const controllerAtores = require('./controller/controller_ator.js')
+    const controllerDiretores = require('./controller/controller_diretor.js')
 
 
 /*********************************************************************************************************** */
@@ -220,7 +224,7 @@ response.status(resultDadosGenero.status_code)
 response.json(resultDadosGenero)
 })
 
-//endpoint que deleta um filme do banco de dados filtrando pelo id
+//endpoint que deleta um genero do banco de dados filtrando pelo id
 app.delete('/v2/acmeFilmes/genero/:id', cors(), async function(request, response){
 let generoId = request.params.id
 
@@ -283,7 +287,7 @@ response.status(resultDadosAtor.status_code)
 response.json(resultDadosAtor.message)
 })
 
-//endpoint que atualiza um filme do banco de dados
+//endpoint que atualiza um ator do banco de dados
 app.put('/v2/acmeFilmes/ator/:id', cors(), bodyParserJSON, async function(request, response){
 let idAtor = request.params.id
 const novosDados = request.body

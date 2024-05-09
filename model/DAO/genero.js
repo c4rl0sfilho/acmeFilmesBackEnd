@@ -45,12 +45,10 @@ const insertGenero = async function(dadosGenero){
         `
         insert into tbl_genero
         (
-            nome, 
-            descricao_genero
+            nome
         )
         values(
-            '${dadosGenero.nome}',
-            '${dadosGenero.descricao_genero}'
+            '${dadosGenero.nome}'
               )
         `
         let rsGenero = await prisma.$queryRawUnsafe(sql)

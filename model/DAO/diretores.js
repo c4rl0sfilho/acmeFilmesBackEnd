@@ -18,76 +18,6 @@ const selectALlDiretores = async function () {
     }
 }
 
-const selectSexo = async function (id) {
-    try {
-        let sql = `select * from tbl_sexoD where id = ${id}`
-
-        let rsSexo = await prisma.$queryRawUnsafe(sql)
-
-        if (rsSexo) {
-            return rsSexo
-        } else {
-            return false
-        }
-    } catch (error) {
-        return false
-    }
-}
-
-const selectNacionalidadeDiretor = async function (idDiretor) {
-    try {
-        let sql = `select * from tbl_nacionalidadeDiretor where id_ator = ${idDiretor}`
-
-        let rsNacionalidade = await prisma.$queryRawUnsafe(sql)
-
-        if (rsNacionalidade) {
-            let sqlNacionalidade = `select * from tbl_nacionalidadeDiretor where id = ${rsNacionalidade[0].id_nacionalidadeA}`
-
-            let rsFinal = await prisma.$queryRawUnsafe(sqlNacionalidade)
-
-            if (rsFinal) {
-                return rsFinal
-            } else {
-                return false
-            }
-        } else {
-            return false
-        }
-    } catch (error) {
-        return false
-    }
-}
-
-const selectFilmesDiretor = async function (idDiretor) {
-    try {
-        let sql = `select * from tbl_diretor_filme where id_diretor = ${idDiretor}`
-
-        let rsFilmeD = await prisma.$queryRawUnsafe(sql)
-
-        console.log(sql)
-
-        if (rsFilmeD) {
-            for (let index = 0; index < rsFilmeD.length; index++) {
-                const element = rsFilmeD[index]
-
-                let sqlFilme = `select * from tbl_filme where id = ${element.id_filme}`
-
-                let rsFilme = await prisma.$queryRawUnsafe(sqlFilme)
-
-                if (rsFilme) {
-                    return rsFilme
-                } else {
-                    return false
-                }
-            }
-
-        } else {
-            return false
-        }
-    } catch (error) {
-        return false
-    }
-}
 
 const selectBuscarDiretor = async function (id) {
     try {
@@ -125,16 +55,14 @@ const insertDiretor = async function (dadosDiretor) {
     try {
         let sql = ` insert into tbl_diretor(
                 nome,
-                foto_diretor,
+                foto,
                 biografia,
-                data_nascimento,
-                id_sexoD
+                data_nascimento
             )values(
                 '${dadosDiretor.nome}',
-                '${dadosDiretor.foto_diretor}',
+                '${dadosDiretor.foto}',
                 '${dadosDiretor.biografia}',
-                '${dadosDiretor.data_nascimento}',
-                ${dadosDiretor.id_sexoD}
+                '${dadosDiretor.data_nascimento}'        
             )`
 
         let rsAtor = await prisma.$executeRawUnsafe(sql)
@@ -149,47 +77,11 @@ const insertDiretor = async function (dadosDiretor) {
     }
 }
 
-const insertFilmesDiretor = async function (id_filme, id_diretor) {
-    try {
-        let sql = `insert into tbl_diretor_filme
 
-        (
-            id_diretor,
-            id_filme
-        )
-          values(
-            ${id_diretor},
-            ${id_filme}
-          )`
-
-          let rsDiretorFilme = await prisma.$executeRawUnsafe(sql)
-
-          if(rsDiretorFilme){         
-            let sqlFilmes = `select * from tbl_filme where id = ${id_filme}`
-
-            let rsFilme = await prisma.$queryRawUnsafe(sqlFilmes)
-
-            if(rsFilme){
-                return rsFilme
-            }else{
-                return false
-            }
-          }
-          else{
-            return false
-          }
-    } catch (error) {
-        return false
-    }
-}
 
 module.exports = {
     selectALlDiretores,
-    selectSexo,
-    selectNacionalidadeDiretor,
-    selectFilmesDiretor,
     selectBuscarDiretor,
     selectLastIdDiretor,
-    insertDiretor,
-    insertFilmesDiretor
+    insertDiretor
 }

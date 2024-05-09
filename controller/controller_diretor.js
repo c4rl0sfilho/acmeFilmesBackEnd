@@ -1,4 +1,4 @@
-const message = require('../modulo/config.js')
+const message = require('../module/config.js')
 
 const diretorDAO = require('../model/DAO/diretores.js')
 
@@ -9,18 +9,6 @@ const getAllDiretores = async function () {
 
     if (dadosDiretores) {
         if (dadosDiretores.length > 0) { 
-            for (let index = 0; index < dadosDiretores.length; index++) { 
-                const element = dadosDiretores[index]
-
-                let sexoDiretor = await diretorDAO.selectSexo(element.id_sexoD)
-                element.sexo = sexoDiretor[0].sexo
-
-                let nacionalidadeDiretor = await diretorDAO.selectNacionalidadeDiretor(element.id)
-                element.nacionalidade = nacionalidadeDiretor[0].pais
-
-                let filmesDiretor = await diretorDAO.selectFilmesDiretor(element.id)
-                element.filmesDiretor = filmesDiretor[index].titulo
-            }
 
             diretoresJSON.diretores = dadosDiretores
             diretoresJSON.quantidade = dadosDiretores.length
@@ -47,16 +35,6 @@ const getDiretor = async function (id) {
     } else {
         let resultDadosDiretor = await diretorDAO.selectBuscarDiretor(idDiretor)
 
-        for (let index = 0; index < resultDadosDiretor.length; index++) {
-            const element = resultDadosDiretor[index]
-
-            let sexoDiretor = await diretorDAO.selectSexo(element.id_sexoD)
-            element.sexo = sexoDiretor[0].sexo
-
-            let filmesDiretor = await diretorDAO.selectFilmesDiretor(element.id)
-            element.filmes = filmesDiretor[index].titulo
-        }
-
         if (resultDadosDiretor) {
             if (resultDadosDiretor.length > 0) {
                 diretorJSON.ator = resultDadosDiretor
@@ -81,24 +59,18 @@ const setInserirDiretor = async function (dadosDiretor, contentType) {
 
             if (
                 dadosDiretor.nome == ''            || dadosDiretor.nome == null            || dadosDiretor.nome == undefined                  || dadosDiretor.nome.length > 80 ||
-                dadosDiretor.foto_diretor == ''    || dadosDiretor.foto_diretor == null    || dadosDiretor.foto_diretor == undefined          || dadosDiretor.foto_diretor.length > 80    ||
+                dadosDiretor.foto == ''    || dadosDiretor.foto == null    || dadosDiretor.foto == undefined          || dadosDiretor.foto.length > 80    ||
                 dadosDiretor.data_nascimento == '' || dadosDiretor.data_nascimento == null || dadosDiretor.data_nascimento == undefined       || dadosDiretor.data_nascimento.length > 10 ||
-                dadosDiretor.biografia == ''       || dadosDiretor.biografia == null       || dadosDiretor.biografia == undefined             ||
-                dadosDiretor.id_sexoD == ''        || dadosDiretor.id_sexoD == null        || dadosDiretor.id_sexoD == undefined              || isNaN(dadosDiretor.id_sexoD)                                  ||
-                dadosDiretor.id_filme == ''        || dadosDiretor.id_filme == null        || dadosDiretor.id_filme == undefined              || isNaN(dadosDiretor.id_filme)
+                dadosDiretor.biografia == ''       || dadosDiretor.biografia == null       || dadosDiretor.biografia == undefined             
             ) {
                 return message.ERROR_REQUIRED_FIELDS //400
             } else {
                 let novoDiretor = await diretorDAO.insertDiretor(dadosDiretor)
                 let novoId = await diretorDAO.selectLastIdDiretor()
-                let filmesDiretor = await diretorDAO.insertFilmesDiretor(dadosDiretor.id_filme, novoId[0].id)
-                let sexoDiretor = await diretorDAO.selectSexo(dadosDiretor.id_sexoD)
 
                 if (novoDiretor) {
                     novoDiretorJSON.id = Number(novoId[0].id)
-                    novoDiretorJSON.ator = dadosDiretor
-                    novoDiretorJSON.sexo = sexoDiretor[0].sexo
-                    novoDiretorJSON.filmes = filmesDiretor
+                    novoDiretorJSON.diretor = dadosDiretor
                     novoDiretorJSON.status_code = message.SUCCESS_CREATED_ITEM.status_code //200
                     novoDiretorJSON.message = message.SUCCESS_CREATED_ITEM.message
 
